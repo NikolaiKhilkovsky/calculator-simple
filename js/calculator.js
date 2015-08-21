@@ -1,27 +1,71 @@
-var historyData = ['dsfgsdf','sdfsdfs','sdfsadf'];
+var historyData = [];
 
 var CalcBox = React.createClass({
     updateResult: function(a){
+        var history = this.state.historyData;
         var res = this.state.result;
-        /**
-         * TODO: create calculate algorithm
-         */
+        if(/\s=\s\-?[0-9]+$/.test(res) && /[0-9]+|\./.test(a)){
+            res = '';
+        }
         switch(a){
             case 'C':
                 this.setState({'result': this.props.result});
-                break;
+                return;
             case '-':
             case '+':
             case '=':
-                a = this.state.result == '0' ? '0' : ' ' + a + ' ';
+                res = res == '' ? '0' : res.replace(/(\.|\s\+\s|\s\-\s)$/, '');
+                if(a == '=' && (!/(\s\+\s|\s\-\s).*[0-9]+$/.test(res) || /\s=\s\-?[0-9]+$/.test(res)) ){
+                    u = '';
+                }
+                else if(a == '-' && res == '0') {
+                    res = '';
+                    u = a;
+                }
+                else if((a == '-' || a == '+') && /\s=\s\-?[0-9]+$/.test(res)){
+                    res = res.replace(/^.+=\s/, '');
+                    u = ' ' + a + ' ';
+                }
+                else {
+                    u = ' ' + a + ' ';
+                }
+                break;
+            case '0':
+                u = res == '' ? '0' : a;
+                u = res == '0' ? '' : a;
+                break;
             case '00':
-                a = this.state.result == '0' ? '0' : a;
+                if(res == '0'){
+                    u = '';
+                }
+                else {
+                    u = res == '' ? '0' : a;
+                }
+                break;
             case '.':
-                a = /\.[0-9]*$/.test(this.state.result) ? '' : a;
-                a = this.state.result == '0' ? '0' + a : a;
+                u = /\.[0-9]*$/.test(res) ? '' : a;
+                if(res == '' || /\s$/.test(res)){
+                    u = '0' + a;
+                }
+                else {
+                    u = a;
+                }
+                break;
             default:
-                this.setState({'result': this.state.result == '0' ? a : this.state.result + a});
+                u = a;
         }
+        if(u == ''){
+            return;
+        }
+        res += u;
+        if (a == '='){
+            console.log(res)
+            res += calculate(res.split(' '));
+            history.push(res);
+            console.dir(history)
+            this.setState({'historyData': history});
+        }
+        this.setState({'result': res});
         
     },
     getInitialState: function() {
@@ -56,7 +100,9 @@ var CalcBody = React.createClass({
         }.bind(this));
         return (
             <div className="calcBody">
-                <div className="showResult">{this.props.result}</div>
+                <div className="showResult">
+                    <input type="text" placeholder="0" value={this.props.result} />
+                </div>
                 <div className="buttons">{calcButtons}</div>
             </div>
         );
@@ -80,6 +126,26 @@ var CalcHistory = React.createClass({
 });
 
 React.render(
-    <CalcBox historyData={historyData} result="0" />,
+    <CalcBox historyData={historyData} result="" />,
     document.getElementById('calculator')
 );
+
+function calculate(expression){
+    for (var i = 0; i < expression.length; i++){
+        if(Number(expression[i])){
+            expression[i] = Number(expression[i]);
+        }
+    }
+    while(expression.length > 2){
+        switch(expression[1]){
+            case '+':
+                expression[0] = expression[0] + expression[2];
+                break;
+            case '-':
+                expression[0] = expression[0] - expression[2];
+                break;
+        }
+        expression.splice(1, 2);
+    }
+    return expression[0].toString();
+}
