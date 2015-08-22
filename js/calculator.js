@@ -161,7 +161,7 @@ var CalcBody = React.createClass({
         return (
             <div className="calcBody">
                 <div className="showResult">
-                    <input type="text" placeholder="0" value={this.props.result} />
+                    <input type="text" placeholder="0" value={this.props.result} readOnly />
                 </div>
                 <div className="buttons">{calcButtons}</div>
             </div>
