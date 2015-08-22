@@ -93,7 +93,7 @@ var CalcBox = React.createClass({
         // If '=' button pressed calculate expression and update history
         if (a == '='){
             res += calculate(res.split(' '));
-            history.push(res);
+            history.push({'id': history.length ,'string': res});
             this.setState({'historyData': history});
         }
 
@@ -156,7 +156,7 @@ var CalcBody = React.createClass({
      */
     render: function(){
         var calcButtons = this.state.buttonsList.map(function(buttonData){
-            return <button className="calcButton" onClick={this.handleClick.bind(null, buttonData)}>{buttonData}</button>;
+            return <button className="calcButton" onClick={this.handleClick.bind(null, buttonData)} key={buttonData}>{buttonData}</button>;
         }.bind(this));
         return (
             <div className="calcBody">
@@ -180,7 +180,7 @@ var CalcHistory = React.createClass({
     render: function(){
         var historyItems = this.props.data.map(function(item){
             return (
-                <div className="item">{item}</div>
+                <div className="item" key={item.id}>{item.string}</div>
             )
         });
         return (
