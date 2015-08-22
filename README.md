@@ -1,2 +1,3 @@
-# calculator
-My calculator
+# My calculator
+
+The simple online calculator
