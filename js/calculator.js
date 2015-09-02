@@ -26,8 +26,8 @@ var CalcBox = React.createClass({
         var res = this.state.result;          // Current result string
         var u;                                // String for uppend to result
 
-        // Clean result string if '=' is present and Digit button pressed
-        if(/\s=\s\-?[0-9]+\.?[0-9]*$/.test(res) && /[0-9]+|\./.test(a)){
+        // Clean result string if '=' is present or result string is '0' and Digit button pressed
+        if((/\s=\s\-?[0-9]+\.?[0-9]*$/.test(res) || res == '0') && /[0-9]+|\./.test(a)){
             res = '';
         }
 
