@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="calculatorApp">
+<html data-ng-app="calculatorApp">
     <head>
         <title>Accounting calculator</title>
         <meta charset="UTF-8">
@@ -10,21 +10,21 @@
         <script src="js/app.js"></script>
     </head>
     <body>
-        <div id="calculator" ng-controller="CalculatorCtrl">
+        <div id="calculator" data-ng-controller="CalculatorCtrl">
             <div class="calc-box">
                 <h1>The Accounting Calculator</h1>
                 <div class="row">
-                    <div class="clac-body">
+                    <div class="calc-body">
                         <div class="show-result">
-                            <input type="text" readonly placeholder="0" ng-model="res">
+                            <input type="text" readonly placeholder="0" data-ng-model="res">
                         </div>
                         <div class="buttons">
-                            <button ng-repeat="button in buttons" class="calc-button" ng-click="update(button)">{{button}}</button>
+                            <button data-ng-repeat="button in buttons" class="calc-button button-{{$index}}" data-ng-click="update(button)">{{button}}</button>
                         </div>
                     </div>
                     <div class="calc-history">
                         <h3>Calculator history</h3>
-                        <div class="item" ng-repeat="item in historyItems">{{item}}</div>
+                        <div class="item" data-ng-repeat="item in historyItems">{{item}}</div>
                     </div>
                 </div>
             </div>
